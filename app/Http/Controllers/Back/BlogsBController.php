@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class BlogsBController extends Controller
@@ -13,7 +14,7 @@ class BlogsBController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -78,6 +79,20 @@ class BlogsBController extends Controller
     {
         //
     }
+    public function createUser(Request $request){
+
+        $validatedData=$request->validate([
+            'email'=>'required |email | unique:users',
+            'password'=>'required | min:6',
+        ]);
+
+        $user=new User();
+        $user->email=$validatedData['email'];
+        $user->password=bcrypt($validatedData['password']);
+        $user->save();
+
+        return redirect()->route('front.success')->with('success', ' Datas is succesfuly added !!');
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -86,4 +101,5 @@ class BlogsBController extends Controller
     {
         //
     }
+
 }
